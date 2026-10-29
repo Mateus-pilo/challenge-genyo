@@ -1,0 +1,8 @@
+.env
+**/.env
+**/node_modules/
+**/dist/
+**/coverage/
+**/.angular/
+**/out-tsc/
+apps/api/*.tsbuildinfo

@@ -1,0 +1,80 @@
+<div *ngIf="mode" class="modal-layer" (click)="dismissed.emit()">
+  <section
+    class="confirmation-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="confirmation-title"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="modal-kicker">CONFIRMAÇÃO</div>
+    <button
+      type="button"
+      class="icon-close modal-close"
+      aria-label="Fechar confirmação"
+      (click)="dismissed.emit()"
+    >
+      ×
+    </button>
+
+    <ng-container *ngIf="mode === 'save' && request as saveRequest">
+      <h2 id="confirmation-title">{{ editing ? 'Salvar alterações?' : 'Confirmar cadastro?' }}</h2>
+      <p class="modal-copy">
+        Revise os dados antes de {{ editing ? 'atualizar' : 'adicionar' }} este funcionário.
+      </p>
+      <dl class="confirmation-details">
+        <div>
+          <dt>Nome</dt>
+          <dd>{{ saveRequest.input.name }}</dd>
+        </div>
+        <div>
+          <dt>Admissão</dt>
+          <dd>{{ saveRequest.input.admissionDate | date: 'dd/MM/yyyy' : 'UTC' }}</dd>
+        </div>
+        <div>
+          <dt>Demissão</dt>
+          <dd>
+            {{
+              saveRequest.input.dismissalDate
+                ? (saveRequest.input.dismissalDate | date: 'dd/MM/yyyy' : 'UTC')
+                : 'Em atividade'
+            }}
+          </dd>
+        </div>
+        <div>
+          <dt>Jornada</dt>
+          <dd>
+            {{ saveRequest.input.workStartTime }}–{{ saveRequest.input.workEndTime }}
+            <span *ngIf="saveRequest.dailyHours">({{ saveRequest.dailyHours }})</span>
+          </dd>
+        </div>
+        <div>
+          <dt>Fechamento</dt>
+          <dd>{{ saveRequest.input.closingFrequency }}</dd>
+        </div>
+      </dl>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline-secondary" (click)="dismissed.emit()">
+          Voltar
+        </button>
+        <button type="button" class="btn btn-dark" [disabled]="saving" (click)="confirmed.emit()">
+          {{ saving ? 'Salvando...' : 'Confirmar' }}
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="mode === 'delete'">
+      <h2 id="confirmation-title">Excluir funcionário?</h2>
+      <p class="modal-copy">
+        O registro de <strong>{{ employee?.name }}</strong> será removido permanentemente.
+      </p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline-secondary" (click)="dismissed.emit()">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-danger" [disabled]="saving" (click)="confirmed.emit()">
+          {{ saving ? 'Excluindo...' : 'Excluir funcionário' }}
+        </button>
+      </div>
+    </ng-container>
+  </section>
+</div>

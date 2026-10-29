@@ -1,0 +1,112 @@
+<section class="form-panel" aria-labelledby="form-title">
+  <div class="form-heading">
+    <div>
+      <p class="eyebrow">{{ formKicker }}</p>
+      <h3 id="form-title">{{ formTitle }}</h3>
+    </div>
+    <button
+      type="button"
+      class="icon-close"
+      aria-label="Fechar formulário"
+      (click)="cancelled.emit()"
+    >
+      ×
+    </button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="form-grid">
+      <div class="field field-wide">
+        <label for="employee-name">Nome completo <span>*</span></label>
+        <input
+          id="employee-name"
+          class="form-control"
+          formControlName="name"
+          placeholder="Ex.: Ana Silva"
+          autocomplete="name"
+        />
+        <small
+          *ngIf="hasError('name', 'required') || hasError('name', 'pattern')"
+          class="field-error"
+          >Informe um nome sem números.</small
+        >
+      </div>
+
+      <div class="field">
+        <label for="admission-date">Data de admissão <span>*</span></label>
+        <input
+          id="admission-date"
+          type="date"
+          class="form-control"
+          formControlName="admissionDate"
+        />
+        <small *ngIf="hasError('admissionDate', 'required')" class="field-error"
+          >Informe a data de admissão.</small
+        >
+      </div>
+
+      <div class="field">
+        <label for="dismissal-date">Data de demissão <span class="optional">OPCIONAL</span></label>
+        <input
+          id="dismissal-date"
+          type="date"
+          class="form-control"
+          formControlName="dismissalDate"
+        />
+        <small *ngIf="form.touched && form.hasError('dateOrder')" class="field-error"
+          >A demissão não pode ser anterior à admissão.</small
+        >
+      </div>
+
+      <div class="field">
+        <label for="work-start">Início do expediente <span>*</span></label>
+        <input id="work-start" type="time" class="form-control" formControlName="workStartTime" />
+        <small *ngIf="hasError('workStartTime', 'required')" class="field-error"
+          >Informe o início do expediente.</small
+        >
+      </div>
+
+      <div class="field">
+        <label for="work-end">Fim do expediente <span>*</span></label>
+        <input id="work-end" type="time" class="form-control" formControlName="workEndTime" />
+        <small *ngIf="hasError('workEndTime', 'required')" class="field-error"
+          >Informe o fim do expediente.</small
+        >
+        <small *ngIf="form.touched && form.hasError('timeOrder')" class="field-error"
+          >O fim deve ser igual ou posterior ao início.</small
+        >
+      </div>
+
+      <div class="field field-wide">
+        <label for="closing-frequency">Periodicidade do fechamento <span>*</span></label>
+        <select id="closing-frequency" class="form-select" formControlName="closingFrequency">
+          <option value="">Selecione uma periodicidade</option>
+          <option *ngFor="let frequency of frequencies" [value]="frequency">{{ frequency }}</option>
+        </select>
+        <small *ngIf="hasError('closingFrequency', 'required')" class="field-error"
+          >Selecione a periodicidade.</small
+        >
+      </div>
+    </div>
+
+    <div class="calculation-strip" aria-live="polite">
+      <div>
+        <span class="calculation-label">JORNADA DIÁRIA</span>
+        <strong>{{ dailyHoursPreview || '—' }}</strong>
+      </div>
+      <div>
+        <span class="calculation-label">DIAS NO PERÍODO</span>
+        <strong>{{ daysWorkedPreview === null ? '—' : daysWorkedPreview }}</strong>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-outline-secondary" (click)="cancelled.emit()">
+        Cancelar
+      </button>
+      <button type="submit" class="btn btn-dark" [disabled]="saving">
+        Revisar dados <span aria-hidden="true">→</span>
+      </button>
+    </div>
+  </form>
+</section>

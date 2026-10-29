@@ -1,0 +1,102 @@
+<div class="table-frame">
+  <div *ngIf="loading" class="table-state">
+    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Carregando equipe...
+  </div>
+
+  <div *ngIf="!loading && employees.length === 0" class="empty-state">
+    <div class="empty-mark">+</div>
+    <h3>Nenhum funcionário cadastrado</h3>
+    <p>Adicione o primeiro registro para começar o diretório da equipe.</p>
+    <button type="button" class="btn btn-outline-dark" (click)="create.emit()">
+      Cadastrar funcionário
+    </button>
+  </div>
+
+  <div *ngIf="!loading && employees.length > 0" class="table-responsive">
+    <table class="table employee-table align-middle mb-0">
+      <thead>
+        <tr>
+          <th scope="col">FUNCIONÁRIO</th>
+          <th scope="col">ADMISSÃO</th>
+          <th scope="col">DEMISSÃO</th>
+          <th scope="col">TEMPO TRABALHADO</th>
+          <th scope="col">FECHAMENTO</th>
+          <th scope="col">JORNADA</th>
+          <th scope="col" class="actions-heading">AÇÕES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let employee of employees">
+          <td>
+            <div class="person-cell">
+              <span class="person-initial">{{ employee.name.charAt(0).toUpperCase() }}</span>
+              <div>
+                <strong>{{ employee.name }}</strong>
+                <small>{{ employee.dismissalDate ? 'Desligado' : 'Ativo' }}</small>
+              </div>
+            </div>
+          </td>
+          <td>{{ employee.admissionDate | date: 'dd/MM/yyyy' : 'UTC' }}</td>
+          <td>
+            {{
+              employee.dismissalDate ? (employee.dismissalDate | date: 'dd/MM/yyyy' : 'UTC') : '—'
+            }}
+          </td>
+          <td>{{ getWorkDuration(employee) }}</td>
+          <td>
+            <span class="frequency-tag">{{ employee.closingFrequency }}</span>
+          </td>
+          <td>{{ employee.workStartTime }}–{{ employee.workEndTime }}</td>
+          <td class="actions-cell">
+            <button type="button" class="table-action" (click)="edit.emit(employee)">Editar</button>
+            <button
+              type="button"
+              class="table-action table-action-danger"
+              (click)="remove.emit(employee)"
+            >
+              Excluir
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!loading && total > 0" class="pagination-bar">
+    <span class="pagination-summary">
+      Exibindo {{ firstVisibleEmployee }}–{{ lastVisibleEmployee }} de {{ total }}
+      funcionários
+    </span>
+    <div class="pagination-controls">
+      <label class="page-size-control">
+        <span>Por página</span>
+        <input
+          type="number"
+          min="1"
+          max="100"
+          step="1"
+          [value]="pageSize"
+          aria-label="Quantidade de funcionários por página"
+          (change)="changePageSize($event)"
+        />
+      </label>
+      <button
+        type="button"
+        class="pagination-button"
+        [disabled]="currentPage === 1"
+        (click)="previousPage()"
+      >
+        Anterior
+      </button>
+      <span class="pagination-page">{{ currentPage }} / {{ totalPages }}</span>
+      <button
+        type="button"
+        class="pagination-button"
+        [disabled]="currentPage === totalPages"
+        (click)="nextPage()"
+      >
+        Próxima
+      </button>
+    </div>
+  </div>
+</div>

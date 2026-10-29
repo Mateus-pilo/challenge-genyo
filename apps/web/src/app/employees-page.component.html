@@ -1,0 +1,116 @@
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Genyo, início">
+      <img class="brand-mark" src="/GO_128x128.png" alt="" />
+      <span
+        >genyo<span class="brand-divider">/</span><span class="brand-section">pessoas</span></span
+      >
+    </a>
+    <div class="topbar-meta"><span class="status-dot"></span> Painel de equipe</div>
+  </header>
+
+  <main class="workspace">
+    <section class="intro-row">
+      <div>
+        <p class="eyebrow">GESTÃO DE PESSOAS <span> / </span> CADASTRO</p>
+        <h1>Challenge Genyo<span>.</span></h1>
+        <p class="intro-copy">Dados de admissão, jornada e fechamento em um só lugar.</p>
+      </div>
+      <div class="date-stamp">
+        <span class="date-stamp-label">VISÃO GERAL</span><strong>Funcionários</strong>
+      </div>
+    </section>
+
+    <section class="metric-row" aria-label="Resumo da equipe">
+      <div class="metric metric-primary">
+        <span class="metric-label">CADASTRADOS</span>
+        <strong>{{ totalEmployees.toString().padStart(2, '0') }}</strong>
+        <span class="metric-note">na equipe</span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">ATIVOS</span>
+        <strong>{{ activeCount.toString().padStart(2, '0') }}</strong>
+        <span class="metric-note">sem data de demissão</span>
+      </div>
+      <div class="metric metric-side-note">
+        <span class="metric-label">ORGANIZAÇÃO</span>
+        <strong class="metric-word">Por admissão</strong>
+        <span class="metric-note">ordem cronológica crescente</span>
+      </div>
+    </section>
+
+    <div *ngIf="successMessage" class="notice notice-success" role="status">
+      <span>{{ successMessage }}</span>
+      <button
+        type="button"
+        class="notice-close"
+        aria-label="Fechar aviso"
+        (click)="successMessage = ''"
+      >
+        ×
+      </button>
+    </div>
+    <div *ngIf="errorMessage" class="notice notice-error" role="alert">
+      <span>{{ errorMessage }}</span>
+      <button
+        type="button"
+        class="notice-close"
+        aria-label="Fechar aviso"
+        (click)="errorMessage = ''"
+      >
+        ×
+      </button>
+    </div>
+
+    <section class="directory-section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">DIRETÓRIO</p>
+          <h2>
+            Funcionários <span class="count-pill">{{ totalEmployees }}</span>
+          </h2>
+        </div>
+        <button type="button" class="btn btn-dark add-button" (click)="openCreate()">
+          <span class="add-symbol">+</span> Novo funcionário
+        </button>
+      </div>
+
+      <app-employee-form
+        *ngIf="formVisible"
+        [employee]="editingEmployee"
+        [mode]="editingId ? 'edit' : 'create'"
+        [saving]="saving"
+        (cancelled)="closeForm()"
+        (saveRequested)="requestSave($event)"
+      />
+
+      <app-employee-list
+        [employees]="employees"
+        [currentPage]="currentPage"
+        [total]="totalEmployees"
+        [pageSize]="pageSize"
+        [loading]="loading"
+        (create)="openCreate()"
+        (edit)="openEdit($event)"
+        (remove)="requestDelete($event)"
+        (pageChange)="changePage($event)"
+        (pageSizeChange)="changePageSize($event)"
+      />
+    </section>
+
+    <footer class="page-footer">
+      <span>GENYO <span class="footer-dot">·</span> PESSOAS</span>
+      <span>Cadastro de funcionários</span>
+    </footer>
+  </main>
+
+  <app-confirmation-dialog
+    [mode]="confirmationMode"
+    [request]="pendingSave"
+    [employee]="pendingDelete"
+    [editing]="!!editingId"
+    [saving]="saving"
+    (dismissed)="cancelConfirmation()"
+    (confirmed)="confirmationMode === 'save' ? confirmSave() : confirmDelete()"
+  />
+</div>

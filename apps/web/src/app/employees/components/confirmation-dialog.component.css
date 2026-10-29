@@ -1,0 +1,131 @@
+.modal-layer {
+  position: fixed;
+  z-index: 1055;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(18, 39, 31, 0.46);
+  animation: fade-in 0.15s ease-out both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.confirmation-modal {
+  position: relative;
+  width: min(440px, 100%);
+  padding: 27px 28px 24px;
+  border-top: 4px solid #c9ef6a;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(10, 32, 23, 0.25);
+}
+
+.modal-kicker {
+  margin-bottom: 13px;
+  color: #829187;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 17px;
+  right: 17px;
+}
+
+.icon-close {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #829087;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.icon-close:hover {
+  background: #edf2ee;
+  color: #263d33;
+}
+
+.confirmation-modal h2 {
+  margin: 0;
+  color: #1f3a30;
+  font-size: 21px;
+}
+
+.modal-copy {
+  margin: 9px 0 18px;
+  color: #75847c;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.confirmation-details {
+  margin: 0;
+  border-top: 1px solid #e8eee9;
+}
+
+.confirmation-details > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 9px 0;
+  border-bottom: 1px solid #edf1ee;
+  font-size: 11px;
+}
+
+.confirmation-details dt {
+  color: #819087;
+  font-weight: 500;
+}
+
+.confirmation-details dd {
+  margin: 0;
+  color: #30493d;
+  font-weight: 700;
+  text-align: right;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.modal-actions .btn {
+  min-height: 38px;
+  padding: 0 15px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.modal-actions .btn-dark {
+  border-color: #173a30;
+  background: #173a30;
+}
+
+.confirmation-modal .btn-danger {
+  border-color: #b55242;
+  background: #b55242;
+}
+
+@media (max-width: 460px) {
+  .confirmation-modal {
+    padding: 24px 20px 19px;
+  }
+}
